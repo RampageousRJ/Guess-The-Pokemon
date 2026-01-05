@@ -43,7 +43,7 @@ submitGuessButton.addEventListener('click', () => {
       location.reload();
     }
     else {
-      alert("Thats now quite right! Guess again!");
+      alert("Thats not quite right! Guess again!");
     }
   }
   catch (error){
