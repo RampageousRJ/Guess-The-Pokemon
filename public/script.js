@@ -1,6 +1,6 @@
 let id = Math.floor(Math.random() * 151) + 1;
 let legacyCryUrl = null;
-let pokemonName = null;
+let sessionId = null;
 
 const pokemonType = document.getElementById('pokemon-type');
 const pokemonAbilities = document.getElementById('pokemon-abilities');
@@ -29,27 +29,33 @@ playLegacySoundButton.addEventListener('click', () => {
   pokemonCry.play();
 });
 
-submitGuessButton.addEventListener('click', () => {
-  let guessedPokemon = guessText.value.trim().toLowerCase()
-  try{
-    let similarity = isFuzzyMatch(guessedPokemon,pokemonName);
-    console.log(similarity)
-    if (similarity === 1) {
+submitGuessButton.addEventListener('click', async () => {
+    const guess = guessText.value;
+
+    if (!sessionId) {
+      alert("Game not initialized yet. Please refresh.");
+      return;
+    }
+
+    const res = await fetch("/api/game/guess", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ sessionId, guess })
+    });
+    const data = await res.json();
+    const result = data.status;
+    if (result === "correct") {
       alert("Hooray! You guessed correctly!");
       location.reload();
     }
-    else if (similarity > 0.8) {
-      alert(`You just missed the spelling a bit! The correct spelling is ${pokemonName}! Congratulations!`)
+    else if (result === "almost") {
+      alert(`You just missed the spelling a bit! The correct spelling is ${res.correct}! Congratulations!`)
       location.reload();
     }
     else {
       alert("Thats not quite right! Guess again!");
     }
-  }
-  catch (error){
-    console.error(error)
-  }
-});
+}); 
 
 function romanToInt(roman) {
   const romanNumerals = {
@@ -75,63 +81,38 @@ function romanToInt(roman) {
   return total;
 }
 
-async function getEvolutionStages(speciesUrl) {
-  const evolutionResponse = await fetch(speciesUrl);
-  const evolutionData = await evolutionResponse.json();
-  let stage = 0;
-  let current = evolutionData.chain;
 
-  // Walk down the chain until we find our Pokémon
-  while (current) {
-    if (current.species.name === pokemonName) {
-      break;
-    }
-    if (current.evolves_to.length > 0) {
-      stage++;
-      current = current.evolves_to[0];
-    } else {
-      break;
-    }
-  }
-  return stage;
-}
 
 async function fetchPokemonData(id) {
   try{
     // Fetch basic Pokémon data
-    const pokeResponse = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
-    const pokeData = await pokeResponse.json();
-    console.log(pokeData);
-    
-    const pokeMoreInfoResponse = await fetch(pokeData.species.url);
-    const pokeMoreInfoData = await pokeMoreInfoResponse.json();
-    console.log(pokeMoreInfoData);
-
+    const pokeResponse = await fetch(`/api/game/start`);
+    const pokemon = await pokeResponse.json();
+    sessionId = pokemon.sessionId;
     // Extract relevant information
-    pokemonName = pokeData.name;
-    legacyCryUrl = pokeData.cries.legacy;
-    const captureRate = pokeMoreInfoData.capture_rate;
-    const color = pokeMoreInfoData.color.name;
-    const generation = pokeMoreInfoData.generation.name;
-    const habitat = pokeMoreInfoData.habitat ? pokeMoreInfoData.habitat.name : 'unknown';
-    const shape = pokeMoreInfoData.shape.name;
-    const isLegendary = pokeMoreInfoData.is_legendary;
-    const isMythical = pokeMoreInfoData.is_mythical;
-    const spriteUrl = pokeData.sprites.front_default;
+    legacyCryUrl = pokemon.hints.cry;
+    const captureRate = pokemon.hints.captureRate;
+    const color = pokemon.hints.color;
+    const generation = pokemon.hints.generation;
+    const habitat = pokemon.hints.habitat ? pokemon.hints.habitat : 'unknown';
+    const shape = pokemon.hints.shape;
+    const isLegendary = pokemon.hints.is_legendary;
+    const isMythical = pokemon.hints.is_mythical;
+    const spriteUrl = pokemon.hints.frontSprite;
 
     let type = []
-    pokeData.types.forEach(t => {
+    pokemon.hints.types.forEach(t => {
       let typeName = t.type.name;
       type.push(typeName.charAt(0).toUpperCase() + typeName.slice(1));
     })
     
     let abilities = []
-    pokeData.abilities.forEach(a => {
+    pokemon.hints.abilities.forEach(a => {
       let abilityName = a.ability.name;
       abilities.push(abilityName.charAt(0).toUpperCase() + abilityName.slice(1));
     })
 
-    const evolutionStage = await getEvolutionStages(pokeMoreInfoData.evolution_chain.url);
+    const evolutionStage = pokemon.hints.evolutionStage;
 
     pokemonType.textContent = `${type.join(', ')}`;
     pokemonAbilities.textContent = `${abilities.join(', ')}`;

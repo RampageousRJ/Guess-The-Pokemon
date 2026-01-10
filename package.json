@@ -1,0 +1,24 @@
+{
+  "name": "guess-the-pokemon",
+  "version": "1.0.0",
+  "description": "Guess-The-Pokemon is a web-based interactive game that challenges users to identify Pokémon characters. The game displays the image of a Pokémon as an additional hint along with other details, and the user must input their guess. It is a fun and engaging way to test your Pokémon knowledge.",
+  "homepage": "https://github.com/RampageousRJ/Guess-The-Pokemon#readme",
+  "bugs": {
+    "url": "https://github.com/RampageousRJ/Guess-The-Pokemon/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RampageousRJ/Guess-The-Pokemon.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server/index.js"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "devDependencies": {}
+}
