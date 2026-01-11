@@ -98,7 +98,7 @@ async function fetchPokemonData(id) {
     const shape = pokemon.hints.shape;
     const isLegendary = pokemon.hints.is_legendary;
     const isMythical = pokemon.hints.is_mythical;
-    const spriteUrl = pokemon.hints.frontSprite;
+    const spriteUrl = pokemon.hints.backSprite;
 
     let type = []
     pokemon.hints.types.forEach(t => {
