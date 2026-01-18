@@ -1,0 +1,20 @@
+* { font-family: 'Orbitron', sans-serif; }
+body { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); min-height: 100vh; }
+.card-glow { box-shadow: 0 0 20px rgba(255, 215, 0, 0.4), 0 0 40px rgba(255, 215, 0, 0.2); border: 1px solid rgba(255, 215, 0, 0.3); transition: all 0.3s; }
+.card-glow:hover { box-shadow: 0 0 30px rgba(255, 215, 0, 0.6), 0 0 60px rgba(255, 215, 0, 0.3); }
+.card-red { box-shadow: 0 0 20px rgba(220, 38, 38, 0.4), 0 0 40px rgba(220, 38, 38, 0.2); border: 1px solid rgba(220, 38, 38, 0.3); }
+.card-red:hover { box-shadow: 0 0 30px rgba(220, 38, 38, 0.6), 0 0 60px rgba(220, 38, 38, 0.3); }
+.btn-glow { background: rgba(255, 215, 0, 0.15); border: 2px solid rgba(255, 215, 0, 0.5); color: #ffd700; transition: all 0.3s; font-weight: 700; }
+.btn-glow:hover { background: rgba(255, 215, 0, 0.25); box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); color: #ffed4e; transform: scale(1.05); }
+.btn-red { background: rgba(220, 38, 38, 0.15); border: 2px solid rgba(220, 38, 38, 0.5); color: #ef4444; transition: all 0.3s; font-weight: 700; }
+.btn-red:hover { background: rgba(220, 38, 38, 0.25); box-shadow: 0 0 20px rgba(220, 38, 38, 0.5); color: #f87171; transform: scale(1.05); }
+#pokemon-sprite { transition: all 0.4s; animation: fadeIn 0.4s; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.table-dark { background: rgba(15, 15, 15, 0.7); border-color: rgba(255, 215, 0, 0.15);}
+.table-dark th { color: #ffd700; font-weight: 600; border-color: rgba(255, 215, 0, 0.15); text-transform: uppercase; font-size: 0.9rem; }
+.table-dark td { color: #e2e8f0; border-color: rgba(255, 215, 0, 0.1); }
+.vh-custom { height: calc(100vh - 80px); }
+input:focus { outline: none; box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.4); border-color: rgba(255, 215, 0, 0.6); }
+.header-glow { text-shadow: 0 0 15px rgba(255, 215, 0, 0.8), 0 0 30px rgba(220, 38, 38, 0.5); animation: titlePulse 3s ease-in-out infinite; }
+@keyframes titlePulse { 0%, 100% { text-shadow: 0 0 15px rgba(255, 215, 0, 0.8), 0 0 30px rgba(220, 38, 38, 0.5); } 50% { text-shadow: 0 0 25px rgba(255, 215, 0, 1), 0 0 50px rgba(220, 38, 38, 0.7); } }
+h2, h3 { font-weight: 700; text-align: center; }

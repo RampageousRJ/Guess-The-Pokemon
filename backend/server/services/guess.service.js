@@ -32,25 +32,6 @@ function normalize(str) {
     .replace(/[^a-z0-9]/g, "");
 }
 
-
-function similarityScore(a, b) {
-  const distance = levenshtein(a, b);
-  return 1 - distance / Math.max(a.length, b.length);
-}
-
-
-function isFuzzyMatch(guess, actual) {
-  const g = normalize(guess);
-  const a = normalize(actual);
-
-  if (!g || !a) return 0.0;
-
-  if (g === a) return 1.0;
-
-  return similarityScore(g, a);
-}
-
-
 export async function validateGuess(guessedPokemon, pokemonName) {
     const g = normalize(guessedPokemon);
     const a = normalize(pokemonName);
