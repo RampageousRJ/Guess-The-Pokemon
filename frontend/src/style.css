@@ -18,3 +18,4 @@ input:focus { outline: none; box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.4); borde
 .header-glow { text-shadow: 0 0 15px rgba(255, 215, 0, 0.8), 0 0 30px rgba(220, 38, 38, 0.5); animation: titlePulse 3s ease-in-out infinite; }
 @keyframes titlePulse { 0%, 100% { text-shadow: 0 0 15px rgba(255, 215, 0, 0.8), 0 0 30px rgba(220, 38, 38, 0.5); } 50% { text-shadow: 0 0 25px rgba(255, 215, 0, 1), 0 0 50px rgba(220, 38, 38, 0.7); } }
 h2, h3 { font-weight: 700; text-align: center; }
+.loader-container { display: flex; justify-content: center; align-items: center; height: 100vh; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); }

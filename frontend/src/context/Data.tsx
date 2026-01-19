@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useState } from "react";
+import { createContext, ReactNode, useEffect, useState } from "react";
 
 interface PokemonSession {
   sessionId: string;
@@ -34,12 +34,12 @@ interface PokemonSession {
 
 interface DataContextType {
   data: PokemonSession | null;
-  setData: (data: PokemonSession) => void;
+  setData: React.Dispatch<React.SetStateAction<PokemonSession | null>>;
 }
 
 export const DataContext = createContext<DataContextType>({
   data: null,
-  setData: () => {},
+  setData: () => null,
 });
 
 interface Props {
@@ -48,6 +48,20 @@ interface Props {
 
 export const DataProvider = ({ children }: Props) => {
   const [data, setData] = useState<PokemonSession | null>(null);
+
+  useEffect(() => {
+    // Prevent re-fetch if data already exists
+    if (data) return;
+
+    fetch("https://guess-the-pokemon-c4jf.vercel.app/api/game/start")
+      .then(res => res.json())
+      .then((session: PokemonSession) => {
+        setData(session);
+      })
+      .catch(err => {
+        console.error("Error starting Pokémon game:", err);
+      });
+  }, [data]);
 
   return (
     <DataContext.Provider value={{ data, setData }}>

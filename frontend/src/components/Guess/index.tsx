@@ -18,7 +18,7 @@ const Guess: React.FC = () => {
         }
 
         try {
-            const res = await fetch("http://localhost:3030/api/game/guess", {
+            const res = await fetch("https://guess-the-pokemon-c4jf.vercel.app/api/game/guess", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
