@@ -52,8 +52,8 @@ export const DataProvider = ({ children }: Props) => {
   useEffect(() => {
     // Prevent re-fetch if data already exists
     if (data) return;
-
-    fetch("https://guess-the-pokemon-c4jf.vercel.app/api/game/start")
+    console.log(process.env.REACT_APP_API_URL);
+    fetch(`${process.env.REACT_APP_API_URL}/api/game/start`)
       .then(res => res.json())
       .then((session: PokemonSession) => {
         setData(session);

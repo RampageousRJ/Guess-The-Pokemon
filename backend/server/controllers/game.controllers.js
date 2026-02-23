@@ -3,8 +3,8 @@ import { fetchPokemon } from "../services/fetch.service.js";
 import { validateGuess } from "../services/guess.service.js";
 import { createGame, getGame, deleteGame } from "../services/session.service.js"
 
-export const getStartGame = async (req,res) => {
-    const id = Math.floor(Math.random()*151) + 1;
+export const getStartGame = async (req, res) => {
+    const id = Math.floor(Math.random() * 151) + 1;
     const sessionId = crypto.randomUUID();
 
     const pokemon = await fetchPokemon(id);
@@ -29,17 +29,17 @@ export const getStartGame = async (req,res) => {
             evolutionStage: pokemon.evolutionStage,
             captureRate: pokemon.captureRate
         }
-    }) 
+    })
 }
 
-export const postGuessGame = async (req,res) => {
-    const {sessionId, guess} = req.body;
+export const postGuessGame = async (req, res) => {
+    const { sessionId, guess } = req.body;
     const game = getGame(sessionId);
-    if(!game) {
-        return res.status(400).json({ error: "Invalid Session ID"} );
+    if (!game) {
+        return res.status(400).json({ error: "Invalid Session ID" });
     }
     const result = await validateGuess(guess, game.name);
-    if(result.status !== "wrong"){
+    if (result.status !== "wrong") {
         deleteGame(sessionId);
     }
     res.json(result);

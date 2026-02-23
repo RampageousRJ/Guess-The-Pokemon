@@ -6,14 +6,14 @@ import RightPane from './components/RightPane';
 import { DataContext } from './context/Data';
 import Loader from './components/Loader';
 
-const App:React.FC = () => {
-  
+const App: React.FC = () => {
+
   const { data } = useContext(DataContext);
 
-  if(!data) {
+  if (!data) {
     return <Loader />;
   }
-  
+
   return (
     <>
       <Header />
