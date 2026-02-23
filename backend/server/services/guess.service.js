@@ -33,15 +33,15 @@ function normalize(str) {
 }
 
 export async function validateGuess(guessedPokemon, pokemonName) {
-    const g = normalize(guessedPokemon);
-    const a = normalize(pokemonName);
-    const similarity = 1 - levenshtein(g, a) / Math.max(g.length, a.length);
+  const g = normalize(guessedPokemon);
+  const a = normalize(pokemonName);
+  const similarity = 1 - levenshtein(g, a) / Math.max(g.length, a.length);
 
-    if (similarity === 1)
-        return { status: "correct" };
+  if (similarity === 1)
+    return { status: "correct" };
 
-    if (similarity > 0.8)
-        return { status: "almost", correct: pokemonName };
+  if (similarity > 0.8)
+    return { status: "almost", correct: pokemonName };
 
-    return { status: "wrong" };
+  return { status: "wrong" };
 }

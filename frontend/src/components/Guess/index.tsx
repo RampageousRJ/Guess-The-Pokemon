@@ -1,6 +1,7 @@
 import React from "react";
 import { DataContext } from "../../context/Data";
 import { useContext } from "react";
+import { GuessSchema } from "./types";
 
 const Guess: React.FC = () => {
   const [guessText, setGuess] = React.useState("");
@@ -27,14 +28,20 @@ const Guess: React.FC = () => {
         }),
       });
 
+      const res_json = await res.json();
       if (!res.ok) {
-        throw new Error("Network error");
+        console.error("Server Error Response:", res_json);
+        alert(res_json.message || "The server rejected your guess. Is the session still valid?");
+        return;
       }
 
-      const data: {
-        status: "correct" | "almost" | "wrong";
-        correct?: string;
-      } = await res.json();
+      const result = GuessSchema.safeParse(res_json);
+
+      if (!result.success) {
+        console.error("Zod Validation Error:", result.error.format());
+        return;
+      }
+      const data = result.data;
 
       if (data.status === "correct") {
         alert("Hooray! You guessed correctly!");
@@ -81,6 +88,11 @@ const Guess: React.FC = () => {
             placeholder="Type Pokémon name..."
             value={guessText}
             onChange={(e) => setGuess(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                onGuessSubmit();
+              }
+            }}
             style={{
               maxWidth: "280px",
               background: "rgba(255, 255, 255, 0.05)",

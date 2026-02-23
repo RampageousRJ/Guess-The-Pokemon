@@ -1,36 +1,5 @@
 import { createContext, ReactNode, useEffect, useState } from "react";
-
-interface PokemonSession {
-  sessionId: string;
-  hints: {
-    types: {
-      slot: number;
-      type: {
-        name: string;
-        url: string;
-      };
-    }[];
-    abilities: {
-      ability: {
-        name: string;
-        url: string;
-      };
-      is_hidden: boolean;
-      slot: number;
-    }[];
-    color: string;
-    generation: string;
-    habitat: string;
-    shape: string;
-    isLegendary: boolean;
-    isMythical: boolean;
-    backSprite: string;
-    frontSprite: string;
-    cry: string;
-    evolutionStage: number;
-    captureRate: number;
-  };
-}
+import { PokemonSessionSchema, PokemonSession } from "./types";
 
 interface DataContextType {
   data: PokemonSession | null;
@@ -50,15 +19,20 @@ export const DataProvider = ({ children }: Props) => {
   const [data, setData] = useState<PokemonSession | null>(null);
 
   useEffect(() => {
-    // Prevent re-fetch if data already exists
     if (data) return;
-    console.log(process.env.REACT_APP_API_URL);
+
     fetch(`${process.env.REACT_APP_API_URL}/api/game/start`)
-      .then(res => res.json())
-      .then((session: PokemonSession) => {
-        setData(session);
+      .then((res) => res.json())
+      .then((json) => {
+        const result = PokemonSessionSchema.safeParse(json);
+
+        if (result.success) {
+          setData(result.data);
+        } else {
+          console.error("Session Validation Failed:", result.error.format());
+        }
       })
-      .catch(err => {
+      .catch((err) => {
         console.error("Error starting Pokémon game:", err);
       });
   }, [data]);
